@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forest Mission IA</title>
+    <style>
+        /* Modern Minimalist Theme - Applied per Theme Factory Skill */
+        :root {
+            --charcoal: #36454f;
+            --slate-gray: #708090;
+            --light-gray: #d3d3d3;
+            --white: #ffffff;
+            --font-header: 'DejaVu Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-body: 'DejaVu Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(54, 69, 79, 0.08);
+            --shadow-md: 0 4px 12px rgba(54, 69, 79, 0.1);
+            --shadow-lg: 0 8px 24px rgba(54, 69, 79, 0.12);
+            --transition: 0.2s ease;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--white);
+            color: var(--charcoal);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        .site-header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--light-gray);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .logo {
+            font-family: var(--font-header);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--charcoal);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo:hover {
+            color: var(--slate-gray);
+        }
+
+        .nav {
+            display: flex;
+            gap: var(--spacing-lg);
+        }
+
+        .nav-link {
+            color: var(--slate-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: color var(--transition);
+            padding: var(--spacing-xs) 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: var(--charcoal);
+            border-bottom-color: var(--charcoal);
+        }
+
+        .nav-link:focus-visible {
+            outline: 2px solid var(--charcoal);
+            outline-offset: 4px;
+            border-radius: 2px;
+        }
+
+        /* Main */
+        main {
+            flex: 1;
+            width: 100%;
+        }
+
+        .section {
+            padding: var(--spacing-2xl) var(--spacing-xl);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-2xl) var(--spacing-xl);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: var(--light-gray);
+            color: var(--slate-gray);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .hero h1 {
+            font-family: var(--font-header);
+            font-weight: 700;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.1;
+            color: var(--charcoal);
+            margin-bottom: var(--spacing-lg);
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--slate-gray);
+            max-width: 600px;
+            margin: 0 auto var(--spacing-xl);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            font-family: var(--font-body);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--charcoal);
+            outline-offset: 2px;
+        }
+
+        .btn--primary {
+            background-color: var(--charcoal);
+            color: var(--white);
+        }
+
+        .btn--primary:hover {
+            background-color: #2a353d;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn--secondary {
+            background-color: transparent;
+            color: var(--charcoal);
+            border: 1px solid var(--light-gray);
+        }
+
+        .btn--secondary:hover {
+            background-color: var(--light-gray);
+            border-color: var(--slate-gray);
+        }
+
+        .btn--ghost {
+            background-color: transparent;
+            color: var(--slate-gray);
+        }
+
+        .btn--ghost:hover {
+            color: var(--charcoal);
+            background-color: var(--light-gray);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .card {
+            background-color: var(--white);
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            transition: all var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--slate-gray);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card:focus-within {
+            outline: 2px solid var(--charcoal);
+            outline-offset: 2px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--light-gray);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-md);
+            color: var(--charcoal);
+        }
+
+        .card h3 {
+            font-family: var(--font-header);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--charcoal);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .card p {
+            color: var(--slate-gray);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: #fafafa;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--slate-gray);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .section-title {
+            font-family: var(--font-header);
+            font-weight: 700;
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            color: var(--charcoal);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-2xl);
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: var(--font-header);
+            font-weight: 700;
+            font-size: 2.5rem;
+            color: var(--charcoal);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--slate-gray);
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Footer */
+        .site-footer {
+            background-color: var(--charcoal);
+            color: var(--white);
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+
+        .footer-text {
+            color: var(--slate-gray);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--spacing-lg);
+        }
+
+        .footer-link {
+            color: var(--slate-gray);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+        }
+
+        /* Theme indicator */
+        .theme-indicator {
+            position: fixed;
+            bottom: var(--spacing-md);
+            right: var(--spacing-md);
+            background-color: var(--charcoal);
+            color: var(--white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .section {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Factory: Modern Minimalist Theme Applied -->
+    <span class="theme-indicator">Theme: Modern Minimalist</span>
+
+    <header class="site-header" role="banner">
+        <div class="header-content">
+            <a href="#" class="logo" aria-label="Forest Mission IA - Inicio">Forest Mission IA</a>
+            <nav class="nav" role="navigation" aria-label="Navegación principal">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#caracteristicas" class="nav-link">Características</a>
+                <a href="#acerca" class="nav-link">Acerca de</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    <main role="main">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container">
+                <span class="hero-badge">Theme Factory Demo</span>
+                <h1 id="hero-title">Forest Mission IA</h1>
+                <p>Una interfaz limpia y moderna construida con el tema <strong>Modern Minimalist</strong> del skill Theme Factory. Paleta en escala de grises, tipografía DejaVu Sans y diseño responsive.</p>
+                <div class="hero-actions">
+                    <a href="#caracteristicas" class="btn btn--primary">Ver características</a>
+                    <a href="#acerca" class="btn btn--secondary">Saber más</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="caracteristicas" class="section features" aria-labelledby="features-title">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-label">Características</span>
+                    <h2 id="features-title" class="section-title">Diseño minimalista, máximo impacto</h2>
+                </header>
+
+                <div class="cards-grid">
+                    <article class="card">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Paleta neutra</h3>
+                        <p>Cuatro tonos de gris cuidadosamente seleccionados para máxima legibilidad y versatilidad en cualquier contexto.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                                <line x1="9" y1="20" x2="15" y2="20"></line>
+                                <line x1="12" y1="4" x2="12" y2="20"></line>
+                            </svg>
+                        </div>
+                        <h3>Tipografía consistente</h3>
+                        <p>DejaVu Sans para headers y body, garantizando coherencia visual y excelente renderizado en todos los sistemas.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                            </svg>
+                        </div>
+                        <h3>Responsive nativo</h3>
+                        <p>CSS Grid y Flexbox con breakpoints fluidos. Funciona perfectamente en móvil, tablet y escritorio sin frameworks.</p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <h3>Accesible</h3>
+                        <p>Semántica HTML5, focus visible, contraste AA, reduced motion y ARIA labels para inclusión total.</p>
+                    </article>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Temas disponibles</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Colores por tema</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Fuentes por tema</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">0</div>
+                        <div class="stat-label">Dependencias</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="acerca" class="section" aria-labelledby="about-title">
+            <div class="container">
+                <header class="section-header">
+                    <span class="section-label">Acerca del tema</span>
+                    <h2 id="about-title" class="section-title">Modern Minimalist</h2>
+                </header>
+
+                <div class="cards-grid">
+                    <article class="card">
+                        <h3>Colores</h3>
+                        <p style="margin-bottom: var(--spacing-sm);"><strong>Charcoal</strong> <code>#36454f</code> — Primario</p>
+                        <p style="margin-bottom: var(--spacing-sm);"><strong>Slate Gray</strong> <code>#708090</code> — Acentos</p>
+                        <p style="margin-bottom: var(--spacing-sm);"><strong>Light Gray</strong> <code>#d3d3d3</code> — Fondos/divisores</p>
+                        <p><strong>White</strong> <code>#ffffff</code> — Texto limpio</p>
+                    </article>
+
+                    <article class="card">
+                        <h3>Tipografía</h3>
+                        <p style="margin-bottom: var(--spacing-sm);"><strong>Headers:</strong> DejaVu Sans Bold</p>
+                        <p><strong>Body:</strong> DejaVu Sans</p>
+                    </article>
+
+                    <article class="card">
+                        <h3>Ideal para</h3>
+                        <p>Presentaciones tech, portfolios de arquitectura, showcases de diseño, propuestas de negocio modernas, visualización de datos.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2026 Forest Mission IA. Theme Factory Skill Demo.</p>
+            <nav class="footer-links" aria-label="Enlaces del pie de página">
+                <a href="#inicio" class="footer-link">Inicio</a>
+                <a href="#caracteristicas" class="footer-link">Características</a>
+                <a href="#acerca" class="footer-link">Acerca</a>
+                <a href="#contacto" class="footer-link">Contacto</a>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 156 24% 7%;
+    --foreground: 45 32% 95%;
+    --card: 152 26% 10%;
+    --card-foreground: 45 30% 91%;
+    --popover: 152 26% 10%;
+    --popover-foreground: 45 30% 91%;
+    --primary: 37 73% 55%;
+    --primary-foreground: 42 55% 8%;
+    --secondary: 155 24% 16%;
+    --secondary-foreground: 120 14% 88%;
+    --muted: 152 22% 13%;
+    --muted-foreground: 140 16% 78%;
+    --accent: 152 27% 22%;
+    --accent-foreground: 45 30% 91%;
+    --destructive: 11 62% 53%;
+    --destructive-foreground: 45 30% 95%;
+    --border: 150 16% 28%;
+    --input: 150 16% 28%;
+    --ring: 37 73% 55%;
+    --radius: 0.25rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    margin: 0;
+    min-height: 100svh;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.32);
+    color: hsl(var(--foreground));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .pixel-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.35) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.35) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+
+  .hero-field {
+    background:
+      radial-gradient(60% 70% at 78% 18%, hsl(var(--primary) / 0.16) 0%, transparent 60%),
+      radial-gradient(55% 65% at 12% 8%, hsl(152 40% 28% / 0.35) 0%, transparent 62%),
+      linear-gradient(180deg, hsl(156 26% 8%) 0%, hsl(var(--background)) 75%);
+  }
+
+  .scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      0deg,
+      hsl(0 0% 0% / 0.16) 0px,
+      hsl(0 0% 0% / 0.16) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+  }
+
+  .health-stripes > div {
+    background-image: repeating-linear-gradient(
+      90deg,
+      #e8b04a 0px,
+      #e8b04a 7px,
+      #f2c96a 7px,
+      #f2c96a 10px
+    );
+  }
+
+  .rule {
+    background-image: repeating-linear-gradient(
+      90deg,
+      hsl(var(--border)) 0px,
+      hsl(var(--border)) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
